@@ -2,7 +2,7 @@ import React,{ useEffect,useState } from 'react'
 import Chat from './Chat';
 import './chat.css'
 const { io } = require("socket.io-client");
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://chatapp-backend-o061.onrender.com");
 // import { useEffect } from 'react'
 
 export default function Client() {    
