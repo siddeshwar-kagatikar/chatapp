@@ -1,12 +1,16 @@
-import React,{ useEffect,useState } from 'react'
+import React,{ useEffect,useState,useContext } from 'react'
+import roomContext from '../context/roomContext'
 import Chat from './Chat';
 import './chat.css'
 const { io } = require("socket.io-client");
-const socket = io.connect("https://chatapp-backend-o061.onrender.com");
+// const socket = io.connect("https://chatapp-backend-o061.onrender.com");
+const socket = io.connect("http://localhost:3001");
 // import { useEffect } from 'react'
 
 export default function Client() {    
     // let date;
+    const context = useContext(roomContext)
+    const { chatdata,fetchdata,addchat,createroom } = context;
     const d = new Date();
     const [date,setdate] = useState(d.getHours()+ ':' + d.getMinutes())
     const [show,setshow] = useState(true)
@@ -32,12 +36,18 @@ export default function Client() {
     const sendRoom = () => {
       socket.emit("join_room",{room: room});
       setshow(!show);
+      createroom(room)
     };
-
  
     const handlemessage = (event) => {setmessage(event.target.value)} 
     const handleroom = (event) => {setroom(event.target.value)}
     const handlename = (event) => {setname(event.target.value)}
+
+    // useEffect(() => {
+    //   fetchdata(room)
+    //   console.log(chatdata._id)
+    //   // eslint-disable-next-line
+    // },[])
 
     useEffect(() => {
       socket.on("receive_message",(data) => {
@@ -46,7 +56,7 @@ export default function Client() {
       })
        // eslint-disable-next-line
     },[socket]);
-
+    // console.log(chat)
    return (
     <div> 
       {show?<div className='room'>

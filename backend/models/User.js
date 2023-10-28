@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 const UserSchema = new Schema({
-    username:{
+    name:{
         type: String,
-        required: true
+        required:[true,'Please add a name'],
     },
-    password:{
-        type: String,
-        required: true
+    mobile_no:{
+        type : Number ,  //mobile number should be unique and not empty.
+        required: true  
     }
 })
 

@@ -1,33 +1,23 @@
 const express = require('express');
-const User = require('../models/User');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
-// const bcrypt = require('bcryptjs');
+const User = require('../models/User')
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "Hey there!I am using whatsapp"
-const fetchuser = require('../middleware/fetchuser')
 
 //Create User
-router.post('/createuser', async (req, res) => {
-    // If ther are erroers, return bad request and the errors
+router.post('/createuser', async(req,res) => {
     let success = false
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({success,errors: errors.array() });
-    }
-    //check wether the user with this email exist
-    try {
-        let user = await User.findOne({ username: req.body.username })
-        if (user) {
-            return res.status(400).json({success,error: "sorry a user with this username already exists" })
+    try{
+        let user = User.find({name: req.body.name})
+        console.log(user)
+        if(user)
+        {
+            return res.status(400).json({success,error: "sorry a user with this mobile number already exists" })
         }
-
-        // const salt = await bcrypt.genSaltSync(10);
-        // const secpass = await bcrypt.hashSync(req.body.password,salt);
-
+        
         user = await User.create({
-            username: req.body.username,
-            password: req.body.password
+            name: req.body.name,
+            mobile_no:req.body.mobile_no
         })
         
         const data = {
@@ -39,47 +29,32 @@ router.post('/createuser', async (req, res) => {
         const autoken = jwt.sign(data,JWT_SECRET);
         console.log({success,autoken});
         res.json({success,autoken})
-    } catch (error) {
+        
+    }catch(error){
         console.error(error.message);
-        res.status(500).send("some error occured");
+        res.status(500).send("failed to create user");
     }
-
 })
 
 //Login
-router.post('/login',async (req,res) => {
-    try{let success = false
-    let user = await User.findOne({ username: req.body.username  })
-    if(!user){
-        return res.status(400).json({success,error: "sorry incorrect credentials"});
-    }
-    if(req.body.password !== user.password){
-        return res.status(400).json({success,error: "sorry incorrect credentials"});
-    }
-
-    const data = {
-        user:{
-            id: user.id
-        }
-    }
-    success = true
-    const autoken = jwt.sign(data,JWT_SECRET);
-    res.json({success,autoken})
-    }catch(error){
-        console.error(error.message);
-        res.status(500).send("error at backend");
-    }
-
-})
-
-router.post('/getuser',fetchuser,async (req,res) => {
+router.post('/login', async (req,res) => {
+    let success = false
     try{
-    let userId = req.user.id;
-    const user = await User.findById(userId).select("-password");
-    res.send(user)
+        let user=await  User.findOne({mobile_no : req.body.mobile_no})
+        if(!user){
+            return res.status(400).json({success,error: "sorry incorrect credentials"}); 
+        }
+        const data = {
+            user:{
+                id: user.id
+            }
+        }
+        success = true
+        const autoken = jwt.sign(data,JWT_SECRET);
+        res.json({success,autoken}); 
     }catch(error){
         console.error(error.message);
-        res.status(500).send("error at backend");
+        res.status(500).send("failed to login");
     }
 })
 

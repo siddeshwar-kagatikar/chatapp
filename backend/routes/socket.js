@@ -1,26 +1,18 @@
-const http = require('http');
-const express = require('express');
 const { Server } = require('socket.io')
+const express = require('express');
 const app = express();
+const http = require('http');
 const server = http.createServer(app)
-const connectToMongo = require('./db')
-connectToMongo();
-const cors = require('cors')
 
-app.use(cors());
-app.use(express.json());
-// app.use('/api/auth', require('./routes/auth'))
-app.use('/api/room', require('./routes/room'))
 const io = new Server(server,{
     cors:{
-        // origin: "https://chatapp-frontend-51aq.onrender.com",
-        origin: "http://localhost:3000",
+        origin: "https://chatapp-frontend-51aq.onrender.com",
         methods: ["GET","POST"],
     },
 });
 
 
-io.on("connection",(socket) => {
+const socket_connnect = () => {io.on("connection",(socket) => {
     console.log(`User Connected: ${socket.id}`);
 
     // socket.on("send_message",(data) => {
@@ -40,8 +32,6 @@ io.on("connection",(socket) => {
         socket.to(room_no).emit("receive_message",data);
         
     })
-})
+})}
 
-server.listen(3001,() => {
-    console.log("server is running on port 3001");
-});
+module.exports = socket_connnect;
