@@ -18,8 +18,7 @@ const RoomState = (props) => {
       body: JSON.stringify({room_no})
     });
     const json = await response.json();
-    // console.log(json)
-    setchatdata(json);
+    setchatdata(json)
   }
 
   //create room
@@ -33,12 +32,12 @@ const RoomState = (props) => {
         body: JSON.stringify({room_no})
       });
      const c = await response.json();
-      setchatdata(chatdata.concat(c));
+      // setchatdata(chatdata.concat(c));
   }
 
   //updatechat
   const addchat = async (room_no,data) => {
-    const response = await fetch(`${host}/api/slots/update`, {
+    const response = await fetch(`${host}/api/room/updateroom`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,17 +46,9 @@ const RoomState = (props) => {
       body: JSON.stringify({room_no,data})
     });
 
-    const c = await response.json();
-    let r = c.room_no
-    for(let i=0; i<5; i++)
-    {
-        if(chatdata[i].room_no === r)
-        {
-            let chat_ = chatdata.splice(i,1)
-            setchatdata(chat_)
-        }
-    }
-    setchatdata(chatdata.concat(c));
+    const json = await response.json();
+    console.log(json)
+    // setchatdata(json);
   }
 
   return (

@@ -5,7 +5,8 @@ const app = express();
 const server = http.createServer(app)
 const connectToMongo = require('./db')
 connectToMongo();
-const cors = require('cors')
+const cors = require('cors');
+const { connect } = require('http2');
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,51 @@ const io = new Server(server,{
         methods: ["GET","POST"],
     },
 });
+
+const axios= require('axios');
+const { request } = require('https');
+
+const postData = {
+    room1 : [1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,0,1],
+    fuck:"Fyckkkkkkk"
+}
+
+// postData.type('application/json');
+const flaskServerUrl = 'http://localhost:5000/api/ml'
+
+axios.post(flaskServerUrl,postData,{
+    headers: {
+      'Content-Type': 'application/json'
+    }})
+
+.then(response=>{
+    // console.log("Posted my data",postData)
+})
+.catch(error =>{
+    console.log("Error making POST request",error)
+})
+
+// app.get('/api/ml',(req,res)=>{
+//     request('http://localhost:5000/api/ml')
+//     .on('error',(err)=>{
+//         console.log(err)
+//     })
+//     .on('end',()=>{
+//         res.send('done')
+//     })
+//     .pipe(request.post('http://localhost:5000/api/ml'))
+// })
+
+app.post('/api/ml',(req,res)=>{
+    request('http://127.0.0.1:5000/api/ml')
+    .on('error',(err)=>{
+        console.log(err)
+    })
+    .on('end',()=>{
+        res.send('done')
+    })
+    .pipe(request.post('http://127.0.0.1:5000/api/ml'))
+})
 
 
 io.on("connection",(socket) => {
@@ -45,3 +91,6 @@ io.on("connection",(socket) => {
 server.listen(3001,() => {
     console.log("server is running on port 3001");
 });
+
+// connecting flask with backend
+

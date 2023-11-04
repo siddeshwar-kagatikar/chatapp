@@ -14,6 +14,7 @@ export default function Client() {
     const d = new Date();
     const [date,setdate] = useState(d.getHours()+ ':' + d.getMinutes())
     const [show,setshow] = useState(true)
+    const [showchat,setshowchat] = useState(true)
     const [chat,setchat] = useState([]) //contains all messages
     const [message,setmessage] = useState("") //message given as input
     const [mesreceived, setmesreceived] = useState(false)  //chat received from backend
@@ -22,13 +23,14 @@ export default function Client() {
     const sendMessage = async () => {
       let send = {message:message,name:name,room:room,date: d.getHours()+ ':' + d.getMinutes()} //contains message just typed along with room and name
       setdate(d.getHours()+ ':' + d.getMinutes());
-      setchat(chat => [...chat,send])
+      await setchat(chat => [...chat,send])
       setmesreceived(!mesreceived)
       setmessage("")
       // await socket.emit("send_message",chat)
-    };
+    }; 
 
     useEffect(() => {
+      // console.log(chat)
       socket.emit("send_message",chat)
       // eslint-disable-next-line
     },[mesreceived])
@@ -36,6 +38,7 @@ export default function Client() {
     const sendRoom = () => {
       socket.emit("join_room",{room: room});
       setshow(!show);
+      setshowchat(!showchat)
       createroom(room)
     };
  
@@ -43,19 +46,29 @@ export default function Client() {
     const handleroom = (event) => {setroom(event.target.value)}
     const handlename = (event) => {setname(event.target.value)}
 
-    // useEffect(() => {
-    //   fetchdata(room)
-    //   console.log(chatdata._id)
-    //   // eslint-disable-next-line
-    // },[])
+    useEffect(() => {   // getting chats from backend
+      fetchdata(room)
+      // eslint-disable-next-line 
+    },[room])
+
+    useEffect(() => {     //uploading chat from backend
+      console.log(chatdata)
+      setchat(chatdata) 
+      // eslint-disable-next-line
+    },[showchat])
+
+    useEffect(() => {
+      addchat(room,chat)
+      // eslint-disable-next-line
+    },[sendMessage])
 
     useEffect(() => {
       socket.on("receive_message",(data) => {
         setchat(data);
-        console.log(data)
+        // console.log(data)
       })
        // eslint-disable-next-line
-    },[socket]);
+    },[socket]); 
     // console.log(chat)
    return (
     <div> 
