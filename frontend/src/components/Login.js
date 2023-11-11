@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React,{ useState,useContext } from 'react'
+import roomContext from '../context/roomContext'
 import { useNavigate } from "react-router-dom";
 // import img from './workmanagement.png'
 
 export default function Login() {
+    const context = useContext(roomContext)
+    const { setname } = context
 
     const [credentials, setcredentials] = useState({ email: "", password: "" })
     // const history = useHistory()
-    // let navigate = useNavigate();
+    let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,14 +26,14 @@ export default function Login() {
         if(json.success){
             //save the auth token and redirect
             localStorage.setItem('token',json.autoken);
-            // navigate("/client");
+            navigate("/doctors");
         }
         else{
             alert("invalid credentials")
         }
+        setname(credentials.email)
         setcredentials({email:"",password:""})
     }
-
     const onChange = (e) => {
         setcredentials({ ...credentials, [e.target.name]: e.target.value })
     }

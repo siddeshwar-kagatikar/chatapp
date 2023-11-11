@@ -5,8 +5,19 @@ import RoomContext from './roomContext';
 const RoomState = (props) => {
     const host = `http://localhost:3001`
     const initialchats = []
-    const [halfroom,sethalfroom] = useState("")
+    const [doctorName,setdoctorName] = useState("")
+    const [username,setusername] = useState("")
     const [chatdata,setchatdata] = useState(initialchats)
+
+  //set doctors name
+  const setdocname = async (name) => {
+    setdoctorName(name)
+  }
+
+  //set user name
+  const setname = async (name) => {
+    setusername(name)
+  }
 
   // fetchallchats
   const fetchdata = async (room_no) => {
@@ -54,7 +65,7 @@ const RoomState = (props) => {
 
   return (
     // eslint-disable-next-line 
-    <RoomContext.Provider value={{ chatdata,sethalfroom,fetchdata,addchat,createroom }}>
+    <RoomContext.Provider value={{ chatdata,doctorName,username,fetchdata,addchat,createroom,setdocname,setname }}>
       {props.children}
     </RoomContext.Provider>
   )

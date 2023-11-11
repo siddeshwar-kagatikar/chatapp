@@ -10,7 +10,7 @@ const socket = io.connect("http://localhost:3001");
 export default function Client() {    
     // let date;
     const context = useContext(roomContext)
-    const { chatdata,fetchdata,addchat,createroom } = context;
+    const { chatdata,fetchdata,addchat,createroom,doctorName,username } = context;
     const d = new Date();
     const [date,setdate] = useState(d.getHours()+ ':' + d.getMinutes())
     const [show,setshow] = useState(true)
@@ -30,21 +30,27 @@ export default function Client() {
     }; 
 
     useEffect(() => {
+      setname(username);
+      setroom(doctorName.concat("",username));
+      // eslint-disable-next-line
+    },[])
+
+    useEffect(() => {
       // console.log(chat)
       socket.emit("send_message",chat)
       // eslint-disable-next-line
     },[mesreceived])
 
     const sendRoom = () => {
-      socket.emit("join_room",{room: room});
+      socket.emit("join_room",{room: (room + name)});
       setshow(!show);
       setshowchat(!showchat)
       createroom(room)
     };
  
     const handlemessage = (event) => {setmessage(event.target.value)} 
-    const handleroom = (event) => {setroom(event.target.value)}
-    const handlename = (event) => {setname(event.target.value)}
+    // const handleroom = (event) => {setroom(event.target.value)}
+    // const handlename = (event) => {setname(event.target.value)}
 
     useEffect(() => {   // getting chats from backend
       fetchdata(room)
@@ -65,24 +71,23 @@ export default function Client() {
     useEffect(() => {
       socket.on("receive_message",(data) => {
         setchat(data);
-        // console.log(data)
       })
        // eslint-disable-next-line
     },[socket]); 
-    console.log(chat)
+
    return (
     <div> 
       {show?<div className='room'>
         <div></div>
         <div>
-      <div className="my-2">
+      {/* <div className="my-2">
       <input placeholder='Room No...' onChange={handleroom} />
-      </div>
-      <div className="my-2">
-      {/* <script src="https://kit.fontawesome.com/0a50529fcc.js" crossorigin="anonymous"></script> */}
+      </div> */}
+      {/* <div className="my-2">
+      <script src="https://kit.fontawesome.com/0a50529fcc.js" crossorigin="anonymous"></script>
       <input placeholder='User Name...' onChange={handlename} />
-      </div>
-      <div className='my-2'><button onClick={sendRoom}>Join Room</button></div>
+      </div> */}
+      <div className='my-2'><button onClick={sendRoom}>Chat with doctor</button></div>
       </div>
       </div>:
       <div>

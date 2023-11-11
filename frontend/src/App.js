@@ -8,7 +8,6 @@ import {
   Route,
 } from "react-router-dom";
 import Login from './components/Login';
-import Check from './components/Check';
 import Doctors from './components/Doctors';
 
 
@@ -39,8 +38,10 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Login/>}>
           </Route>
-          <Route exact path="/chatbot" element={<Client/>}>
+          <Route exact path="/doctors" element={<Doctors/>}>
           </Route>
+          {/* <Route exact path="/chatbot" element={<Client/>}>
+          </Route> */}
         </Routes>
         </div>  
       </BrowserRouter>

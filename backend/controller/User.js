@@ -46,9 +46,7 @@ exports.createUser = async (req, res) => {
   //     });
   //   }
     try {
-      console.log("yes...........................................")
       const user = new User(req.body);
-      console.log("yes...........................................")
       const password = req.body.password;
       let secPass = await securePassword(password);
       user.password = secPass;

@@ -1,21 +1,23 @@
-import React,{ useEffect,useState,useContext } from 'react'
+import React,{useState,useContext } from 'react'
 import roomContext from '../context/roomContext'
-// import { Navigate } from "react-router-dom";
+import Client from './Client';
 
 function Doctors() {
-  // const navigate = useNavigate;
+  const [doctorList, setDoctorList] = useState(true);
   const context = useContext(roomContext)
-    const { sethalfroom } = context
-      const onclick = () => {
-        sethalfroom("Neurology")
-        // navigate("/client")
-      }
+  const { setdocname } = context
+  const onclick = () => {
+    setdocname("Neurology")
+    setDoctorList(false)
+  }
+
   return (
     <div>
-      <button type="button" className="btn btn-primary" onClick={onclick}>Neurology</button>
+      {doctorList?<div><button type="button" className="btn btn-primary" onClick={onclick}>Neurology</button>
       <button type="button" className="btn btn-primary">Cardiology</button>
       <button type="button" className="btn btn-primary">Kidneylogy</button>
-      <button type="button" className="btn btn-primary">Liverlogy</button>    
+      <button type="button" className="btn btn-primary">Liverlogy</button></div>  :  
+      <Client/>}
     </div>
   )
 }
