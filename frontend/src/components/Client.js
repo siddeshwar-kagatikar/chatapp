@@ -69,7 +69,7 @@ export default function Client() {
       })
        // eslint-disable-next-line
     },[socket]); 
-    // console.log(chat)
+    console.log(chat)
    return (
     <div> 
       {show?<div className='room'>

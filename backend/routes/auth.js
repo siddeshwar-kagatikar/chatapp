@@ -1,61 +1,29 @@
 const express = require('express');
-const router = express.Router();
-const User = require('../models/User')
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = "Hey there!I am using whatsapp"
+const userRouter = express.Router();
+const User = require('../controller/User.js');
+const { body } = require('express-validator');
+const decodeMiddleware = require('../middleware/fetchuser.js');
+const decoder = decodeMiddleware.decoder;
 
-//Create User
-router.post('/createuser', async(req,res) => {
-    let success = false
-    try{
-        let user = User.find({name: req.body.name})
-        console.log(user)
-        if(user)
-        {
-            return res.status(400).json({success,error: "sorry a user with this mobile number already exists" })
-        }
-        
-        user = await User.create({
-            name: req.body.name,
-            mobile_no:req.body.mobile_no
-        })
-        
-        const data = {
-            user:{
-                id: user.id
-            }
-        }
-        success = true;
-        const autoken = jwt.sign(data,JWT_SECRET);
-        console.log({success,autoken});
-        res.json({success,autoken})
-        
-    }catch(error){
-        console.error(error.message);
-        res.status(500).send("failed to create user");
-    }
-})
+userRouter.post('/signup',[
+    body('name','Enter a valid name').isLength({min : 3}),
+    body('displayName','Enter a valid displayName').isLength({min : 3}),
+    body('emailid','Enter a valid email address').isEmail(),
+    body('password','Password should atleast have 5 characters').isLength({min : 5}),
+    body('dob','Date needs to be a valid date').isDate({format:'DD/MM/YYYY'})
+],User.createUser);
 
-//Login
-router.post('/login', async (req,res) => {
-    let success = false
-    try{
-        let user=await  User.findOne({mobile_no : req.body.mobile_no})
-        if(!user){
-            return res.status(400).json({success,error: "sorry incorrect credentials"}); 
-        }
-        const data = {
-            user:{
-                id: user.id
-            }
-        }
-        success = true
-        const autoken = jwt.sign(data,JWT_SECRET);
-        res.json({success,autoken}); 
-    }catch(error){
-        console.error(error.message);
-        res.status(500).send("failed to login");
-    }
-})
+userRouter.post('/login',[
+    body('input','Input(Emailid or DisplayNamwe) cannot be blank').exists(),
+    body('password','Password cannot be blank').exists()
+],User.loginUser);
 
-module.exports = router
+userRouter.post('/changePassword',decoder,User.changePassword);
+
+userRouter.post('/decode',decoder,User.decodeUser);
+
+userRouter.post('/forgetPassword',User.forgetPassword);
+
+userRouter.post('/resetPassword',User.resetPassword);
+
+exports.userRoute = userRouter;

@@ -4,6 +4,11 @@ import './chat.css'
 
 export default function Chat(props) {
   let i = 1
+  let print = null
+  // if(props.text.length !== 0)
+  // {
+  //   print = 1
+  // }
   return (
     <div>
       <div className="chatbox">

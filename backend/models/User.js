@@ -1,17 +1,14 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-    name:{
-        type: String,
-        required:[true,'Please add a name'],
-    },
-    mobile_no:{
-        type : Number ,  //mobile number should be unique and not empty.
-        required: true  
-    }
-})
-
-const User = mongoose.model('user',UserSchema);
-User.createIndexes();
-module.exports = User;
+const userSchema = new Schema({
+    name: { type: String, required: true,minlength:[3,'Minimum 3 characters'] },
+    displayName: { type: String, required: true,minlength:[3,'Minimum 3 characters'] },
+    emailid: { type: String, required: true, unique: true },
+    password: { type: String, required: true, minlength:[5,'Minimum 5 characters'] },
+    dob: { type: Date },
+    resetLink: { type: String, default: ''},
+    timestamp: { type: Date, default: Date.now },
+  });
+  
+exports.user = mongoose.model("user", userSchema);

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const http = require('http');
 const express = require('express');
 const { Server } = require('socket.io')
@@ -6,20 +8,21 @@ const server = http.createServer(app)
 const connectToMongo = require('./db')
 connectToMongo();
 const cors = require('cors');
-const { connect } = require('http2');
+const userRouter = require("./routes/auth.js");
 
 app.use(cors());
 app.use(express.json());
-// app.use('/api/auth', require('./routes/auth'))
+app.use('/api/auth', userRouter.userRoute)
 app.use('/api/room', require('./routes/room'))
+app.use('/api/patient',require('./routes/patients'))
 const io = new Server(server,{
     cors:{
-        // origin: "https://chatapp-frontend-51aq.onrender.com",
-        origin: "http://localhost:3000",
+        origin: "https://chatapp-frontend-51aq.onrender.com",
+         origin: "http://localhost:3000",
         methods: ["GET","POST"],
     },
 });
-
+// -------------------------- flask connection ------------------------------------
 const axios= require('axios');
 const { request } = require('https');
 
@@ -64,7 +67,7 @@ app.post('/api/ml',(req,res)=>{
     })
     .pipe(request.post('http://127.0.0.1:5000/api/ml'))
 })
-
+//-------------------------------------------------------------------------------------
 
 io.on("connection",(socket) => {
     console.log(`User Connected: ${socket.id}`);
@@ -91,6 +94,4 @@ io.on("connection",(socket) => {
 server.listen(3001,() => {
     console.log("server is running on port 3001");
 });
-
-// connecting flask with backend
 

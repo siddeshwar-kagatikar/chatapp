@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Client from './components/Client'; 
 import RoomState from './context/RoomState'; 
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Login from './components/Login';
+import Check from './components/Check';
+import Doctors from './components/Doctors';
 
 
 function App() {
@@ -24,12 +32,25 @@ function App() {
   },[])
   console.log(data)
   return (
-    <div className="App">
+    <>
       <RoomState>
-        <Client/>
+      <BrowserRouter>
+        <div className='container'>
+        <Routes>
+          <Route exact path="/" element={<Login/>}>
+          </Route>
+          <Route exact path="/chatbot" element={<Client/>}>
+          </Route>
+        </Routes>
+        </div>  
+      </BrowserRouter>
+        {/* <Login/> */}
+        {/* <Check /> */}
+        {/* <Client/> */}
+        {/* <Doctors/> */}
       </RoomState>
 
-    </div>
+    </>
   );
 }
 

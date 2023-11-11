@@ -1,8 +1,10 @@
 const Room = require('../models/Room')
 const express = require('express');
 const router = express.Router();
-const fetchroom = require("../middleware/fetchroom"); 
+// const decodeMiddleware = require('../middleware/fetchuser.js');
+// const decoder = decodeMiddleware.decoder;
 
+// router.use(fetchuser)
 //fetchall data
 router.post('/fetchdata', async (req, res) => {
     try{

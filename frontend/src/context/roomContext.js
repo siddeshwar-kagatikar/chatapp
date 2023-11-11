@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const slotContext = createContext();
+const roomContext = createContext();
 
-export default slotContext;
+export default roomContext;

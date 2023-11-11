@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import RoomContext from './roomContext';
 
+
 const RoomState = (props) => {
     const host = `http://localhost:3001`
     const initialchats = []
-
+    const [halfroom,sethalfroom] = useState("")
     const [chatdata,setchatdata] = useState(initialchats)
 
   // fetchallchats
@@ -13,7 +14,7 @@ const RoomState = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "autoken": localStorage.getItem('token')
+        "autoken": localStorage.getItem('token')
       },
       body: JSON.stringify({room_no})
     });
@@ -27,12 +28,12 @@ const RoomState = (props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // "autoken": localStorage.getItem('token')
+          "autoken": localStorage.getItem('token')
         },
         body: JSON.stringify({room_no})
       });
      const c = await response.json();
-      // setchatdata(chatdata.concat(c));
+      setchatdata(chatdata.concat(c));
   }
 
   //updatechat
@@ -41,7 +42,7 @@ const RoomState = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // "autoken": localStorage.getItem('token')
+        "autoken": localStorage.getItem('token')
       },
       body: JSON.stringify({room_no,data})
     });
@@ -53,12 +54,11 @@ const RoomState = (props) => {
 
   return (
     // eslint-disable-next-line 
-    <RoomContext.Provider value={{ chatdata,fetchdata,addchat,createroom }}>
+    <RoomContext.Provider value={{ chatdata,sethalfroom,fetchdata,addchat,createroom }}>
       {props.children}
     </RoomContext.Provider>
   )
 
 }
-
 
 export default RoomState;
