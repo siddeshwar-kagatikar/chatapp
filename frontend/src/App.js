@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect, useState, useContext } from 'react';
+// import './App.css';
 import Client from './components/Client'; 
 import RoomState from './context/RoomState'; 
 import {
@@ -9,14 +9,22 @@ import {
 } from "react-router-dom";
 import Login from './components/Login';
 import Doctors from './components/Doctors';
+import Video from './components/Video';
+import WhatsApp from "./pages/WhatsApp";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import ChatState from "./context/chatroom/ChatState"
+import roomContext from './context/roomContext'
+import PatientState from './context/PatientState';
 
 
 function App() {
-  const [data,setdata] = useState("null")
+  const context = useContext(roomContext)
+    // const { message } = context;
+  // const [data,setdata] = useState("null")
 
   // const fetchdata = async () => {
   //   const response = await fetch(`/api/ml`,{
-  //     method: "GET",
+  //     method: "POST",
   //     headers: {
   //       "Content-Type": "text",
   //     },
@@ -26,29 +34,34 @@ function App() {
   //   setdata(data)
   // }
 
-  useEffect(() => {
-    fetch("/api/ml").then(res => res.json()).then(data => setdata(data.prediction_str))
-  },[])
-  console.log(data)
-  return (
+  // useEffect(() => {
+  //   fetchdata();
+  //   fetch("/api/ml").then(res => res.json()).then(data => setdata(data.prediction_str))
+  // },[])
+  // console.log(data)
+  return ( 
     <>
       <RoomState>
+        <PatientState>
+        <ChatState>
       <BrowserRouter>
         <div className='container'>
         <Routes>
           <Route exact path="/" element={<Login/>}>
           </Route>
-          <Route exact path="/doctors" element={<Doctors/>}>
+          <Route exact path="/doctorside" element={<WhatsApp /> }>
           </Route>
-          {/* <Route exact path="/chatbot" element={<Client/>}>
-          </Route> */}
+          <Route exact path="/patientside" element={<Doctors /> }>
+          </Route>
+          <Route exact path="/video" element={<Video/>}>
+          </Route>
         </Routes>
         </div>  
       </BrowserRouter>
-        {/* <Login/> */}
-        {/* <Check /> */}
-        {/* <Client/> */}
-        {/* <Doctors/> */}
+    {/* <WhatsApp />   */}
+    {/* <Client username={"kelagod"} doctorName={"Neurology"} message={"sd"} /> */}
+    </ChatState>
+    </PatientState>
       </RoomState>
 
     </>

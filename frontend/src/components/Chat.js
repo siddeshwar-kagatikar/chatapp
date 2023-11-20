@@ -11,7 +11,7 @@ export default function Chat(props) {
   // }
   return (
     <div>
-      <div className="chatbox">
+      {/* <div className="chatbox">
           {props.texts.map((text) => {
             return <div key={i++} className='bg-text' id={props.name === text.name ? "you" : "other"}>
               <div className="text"  key={text.message} >
@@ -22,7 +22,7 @@ export default function Chat(props) {
               </div>
               </div>
           })}
-        </div>
+        </div> */}
         {/* id={props.name === text.name ? "you" : "other"} */}
         {/* rgba(228, 184, 5, 0.76) */}
       </div>

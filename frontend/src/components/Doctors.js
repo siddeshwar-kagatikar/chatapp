@@ -1,6 +1,7 @@
 import React,{useState,useContext } from 'react'
 import roomContext from '../context/roomContext'
-import Client from './Client';
+import Patientside from './Patientside';
+// import Client from './Client';
 
 function Doctors() {
   const [doctorList, setDoctorList] = useState(true);
@@ -17,7 +18,7 @@ function Doctors() {
       <button type="button" className="btn btn-primary">Cardiology</button>
       <button type="button" className="btn btn-primary">Kidneylogy</button>
       <button type="button" className="btn btn-primary">Liverlogy</button></div>  :  
-      <Client/>}
+      <Patientside/>}
     </div>
   )
 }

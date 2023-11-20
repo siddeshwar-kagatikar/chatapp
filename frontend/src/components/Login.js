@@ -1,4 +1,4 @@
-import React,{ useState,useContext } from 'react'
+import React,{ useState,useContext, useEffect } from 'react'
 import roomContext from '../context/roomContext'
 import { useNavigate } from "react-router-dom";
 // import img from './workmanagement.png'
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const context = useContext(roomContext)
     const { setname } = context
+    const [user,setuser] = useState("");
 
     const [credentials, setcredentials] = useState({ email: "", password: "" })
     // const history = useHistory()
@@ -26,7 +27,8 @@ export default function Login() {
         if(json.success){
             //save the auth token and redirect
             localStorage.setItem('token',json.autoken);
-            navigate("/doctors");
+            if(user === "patient") { navigate("/patientside"); }
+            else if ( user === "doctor" ) { navigate("/doctorside") }
         }
         else{
             alert("invalid credentials")
@@ -38,9 +40,28 @@ export default function Login() {
         setcredentials({ ...credentials, [e.target.name]: e.target.value })
     }
 
+    const setDoctor = () => {
+        setuser("doctor");
+    }
+
+    const setPatient = () => {
+        setuser("patient");
+    }
 
     return (
         <div className='wrapper'>
+            <div className="form-check">
+                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" onClick={setDoctor}/>
+                <label className="form-check-label" htmlFor="flexRadioDefault1">
+                    Doctor
+                </label>
+                </div>
+            <div className="form-check">
+                <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={setPatient}/>
+                <label className="form-check-label" forhtmlFor="flexRadioDefault2">
+                    Patient
+                </label>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

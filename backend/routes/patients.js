@@ -4,9 +4,9 @@ const router = express.Router();
 
 // add patients
 router.post('/addpatient',async (req,res) => {
-    const {doctortype,history} = req.body
+    const {doctortype,history,name,id,priority} = req.body
     const patient = await Patient.create({
-        doctortype,history
+        doctortype,history,name,id,priority
     })
    res.json(patient)
 })
@@ -15,6 +15,9 @@ router.post('/addpatient',async (req,res) => {
 router.post('/fetchallpatients',async (req,res) => {
     const patients = await Patient.find({doctortype: req.body.doctortype})
     res.json(patients)
+    console.log("all mare log: ",patients)
+    console.log("---------------------------------fetched all patients-----------------------------")
+
 })
 
 

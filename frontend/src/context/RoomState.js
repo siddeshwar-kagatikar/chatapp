@@ -6,8 +6,15 @@ const RoomState = (props) => {
     const host = `http://localhost:3001`
     const initialchats = []
     const [doctorName,setdoctorName] = useState("")
-    const [username,setusername] = useState("")
+    const [username,setusername] = useState("z")
     const [chatdata,setchatdata] = useState(initialchats)
+    const [message,setmessage] = useState("");
+    const [patients,setpatients] = useState([]);
+  
+  //set message
+  const setmessages = async (message) => {
+    setmessage(message)
+  }
 
   //set doctors name
   const setdocname = async (name) => {
@@ -59,13 +66,28 @@ const RoomState = (props) => {
     });
 
     const json = await response.json();
-    console.log(json)
+    // console.log(json)
     // setchatdata(json);
   }
 
+  //--------------------------------------------------------------------------------------
+  const fetchpatients = async (doctortype) => {
+    const response = await fetch(`${host}/api/patient/fetchallpatients`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            // "autoken": localStorage.getItem('token')
+        },
+        body: JSON.stringify({doctortype})
+    });
+    const json = await response.json();
+    setpatients(json)
+    // console.log(json)
+}
+
   return (
     // eslint-disable-next-line 
-    <RoomContext.Provider value={{ chatdata,doctorName,username,fetchdata,addchat,createroom,setdocname,setname }}>
+    <RoomContext.Provider value={{ patients,chatdata,doctorName,username,message,fetchdata,addchat,createroom,setdocname,setname,setmessages,fetchpatients }}>
       {props.children}
     </RoomContext.Provider>
   )

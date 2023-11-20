@@ -6,7 +6,7 @@ import pandas as pd
 app=Flask(__name__)
 clf=pickle.load(open('model.pkl','rb'))
 
-@app.route('/api/ml',methods=['GET','POST'])
+# @app.route('/api/ml',methods=['GET','POST'])
 
 def postContent():
     data=(request.json)
@@ -35,9 +35,9 @@ def predict():
     eigthinthparameter=request.form.get('eigthinthparameter')
 
     # prediction= clf.predict([[firstparameter,secondparameter,thirdparameter,fourthparameter,fifthparameter,sixthparameter,seventhparameter,eightthparameter,ninthparameter,tenthparameter,eleventhparameter,twelvethparameter,thirtenthparameter,fourtenthparameter,fiftenthparameter,sixtenthparameter,seventithparameter,eigthinthparameter]])
-    prediction = clf.predict([[1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,1,0,1]])
+    prediction = clf.predict([[0,0,0,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0]])
     prediction_str = str(prediction[0]) 
-    print(prediction)
+    print(prediction) 
     return { 'prediction_str': prediction_str}
 
 if __name__=='__main__':
